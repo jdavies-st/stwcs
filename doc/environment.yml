@@ -5,5 +5,5 @@ dependencies:
   - astropy
   - numpy
   - matplotlib
-  - stsci.tools
+  - stsci
   - stsci.sphinxext
