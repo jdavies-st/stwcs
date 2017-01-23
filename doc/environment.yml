@@ -4,4 +4,6 @@ channels:
 dependencies:
   - astropy
   - numpy
+  - matplotlib
   - stsci.tools
+  - stsci.sphinxext
