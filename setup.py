@@ -24,7 +24,7 @@ else:
 
 version = relic.release.get_info()
 relic.release.write_template(version, 'stwcs')
- 
+
 try:
     from distutils.config import ConfigParser
 except ImportError:
@@ -33,7 +33,7 @@ except ImportError:
 conf = ConfigParser()
 conf.read(['setup.cfg'])
 
-# Get some config values                                                                   
+# Get some config values
 metadata = dict(conf.items('metadata'))
 PACKAGENAME = metadata.get('package_name', 'stwcs')
 DESCRIPTION = metadata.get('description', '')
@@ -43,11 +43,11 @@ AUTHOR_EMAIL = metadata.get('author_email', 'help@stsci.edu')
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = ['stwcs/tests']
+        self.test_args = ['stwcs/']
         self.test_suite = True
 
     def run_tests(self):
-        # import here, cause outside the eggs aren't loaded                                
+        # import here, cause outside the eggs aren't loaded
         import pytest
         errno = pytest.main(self.test_args)
         sys.exit(errno)

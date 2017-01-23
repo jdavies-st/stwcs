@@ -17,11 +17,10 @@ descriptions in the headers.
 from __future__ import absolute_import, print_function # confidence high
 import os
 
-from . import distortion
 from stsci.tools import fileutil
 from stsci.tools import teal
 
-
+from . import distortion
 from .version import *
 
 try:
