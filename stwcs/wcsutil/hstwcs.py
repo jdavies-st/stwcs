@@ -21,10 +21,22 @@ __all__ = ['HSTWCS']
 def extract_rootname(kwvalue, suffix=""):
     """ Returns the rootname from a full reference filename
 
-        If a non-valid value (any of ['','N/A','NONE','INDEF',None]) is input,
-            simply return a string value of 'NONE'
+    If a non-valid value (any of ['','N/A','NONE','INDEF',None]) is input,
+    simply return a string value of 'NONE'
 
-        This function will also replace any 'suffix' specified with a blank.
+    This function will also replace any 'suffix' specified with a blank.
+
+    Parameters
+    ----------
+    kwvalue: str
+        Header keyword value containing a path
+    suffix: str, opt
+        suffix to strip from resulting rootname upon return
+
+    Returns
+    -------
+    rootname: str
+        stripped rootname with the path removed.
     """
     # check to see whether a valid kwvalue has been provided as input
     if kwvalue.strip() in ['', 'N/A', 'NONE', 'INDEF', None]:
@@ -48,7 +60,17 @@ def extract_rootname(kwvalue, suffix=""):
 
 
 def build_default_wcsname(idctab):
+    """Create a default name for the wcs of the input idctab
 
+    Parameters
+    ----------
+    idctab: str
+        name of the icdtab file
+
+    Returns
+    -------
+    wcsname: str
+    """
     idcname = extract_rootname(idctab, suffix='_idc')
     wcsname = 'IDC_' + idcname
     return wcsname
@@ -993,8 +1015,10 @@ def determine_refframe(phdr):
         refframe = phdr['REFFRAME'].upper()
     except KeyError:
         refframe = None
+
     if refframe == "GSC1":
         refframe = "FK5"
     elif refframe != "ICRS":
         refframe = None
+        
     return refframe

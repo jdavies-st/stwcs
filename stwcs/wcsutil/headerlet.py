@@ -28,6 +28,7 @@ from stsci.tools.fileutil import countExtn
 from stsci.tools import fileutil as fu
 from stsci.tools import parseinput
 
+### FIX import to absolute after sure tests exercise this
 from stwcs.updatewcs import utils
 from . import altwcs
 from . import wcscorr
@@ -75,7 +76,6 @@ COLUMN_FMT = '{:<{width}}'
 
 def init_logging(funcname=None, level=100, mode='w', **kwargs):
     """
-
     Initialize logging for a function
 
     Parameters
@@ -129,6 +129,21 @@ def with_logging(func):
 
 
 def is_par_blank(par):
+    """Test if par qualifies as 'blank'
+
+    If and only if par is an empty-string, single whitespace, 'INDEF',
+    'NONE', or the none-type object, it will be considered blank.
+
+    Parameters
+    ----------
+    par: string
+        Generic parameter to test for 'blankness'
+
+    Returns
+    -------
+    blank: bool,
+        True if par matches any of the 'blank' tests, False otherwise
+    """
     return par in ['', ' ', 'INDEF', "None", None]
 
 
@@ -165,27 +180,33 @@ def parse_filename(fname, mode='readonly'):
 
     """
     close_fobj = False
+
     if not isinstance(fname, list):
         if sys.version_info[0] >= 3:
             is_string = isinstance(fname, str)
         else:
             is_string = isinstance(fname, basestring)
+
         if is_string:
             fname = fu.osfn(fname)
+
         fobj = fits.open(fname, mode=mode)
         close_fobj = True
     else:
         fobj = fname
+
         if hasattr(fobj, 'filename'):
             fname = fobj.filename()
         else:
             fname = ''
+
     return fobj, fname, close_fobj
 
 
 def get_headerlet_kw_names(fobj, kw='HDRNAME'):
-    """
-    Returns a list of specified keywords from all HeaderletHDU
+    """Grab header keyword values in all headerlets in file
+
+    Returns a list of the specified keyword values from all HeaderletHDU
     extensions in a science file.
 
     Parameters
@@ -193,6 +214,11 @@ def get_headerlet_kw_names(fobj, kw='HDRNAME'):
     fobj : str, `astropy.io.fits.HDUList`
     kw : str
         Name of keyword to be read and reported
+
+    Returns
+    -------
+    hdrnames: list
+        keyword values from all headerlets
     """
 
     fobj, fname, open_fobj = parse_filename(fobj)
