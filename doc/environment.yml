@@ -1,4 +1,4 @@
-name: stak
+name: stwcs
 channels:
   - http://ssb.stsci.edu/astroconda
 dependencies:
