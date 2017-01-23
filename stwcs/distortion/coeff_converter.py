@@ -4,6 +4,7 @@ import numpy as np
 from astropy.io import fits
 from astropy import wcs as pywcs
 
+__all__ = ['sip2idc']
 
 def sip2idc(wcs):
     """

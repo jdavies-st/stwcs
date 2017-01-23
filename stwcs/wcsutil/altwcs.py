@@ -592,7 +592,7 @@ def wcskeys(fobj, ext=None):
 
 def wcsnames(fobj, ext=None):
     """
-    Returns a dictionary of wcskey: WCSNAME pairs
+    Returns a dictionary of wcskey: wcsname pairs
 
     Parameters
     ----------

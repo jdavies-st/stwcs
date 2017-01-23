@@ -44,9 +44,9 @@ This file now fully describes the WCS solution for this image, complete with all
 
 The primary header must have 4 required keywords:
 
-- `HDRNAME`  - a unique name for the headerlet
-- `DESTIM`   - target image filename (the ROOTNAME keyword of the original archive filename)
-- `WCSNAME`  - the value of WCSNAME<key> copied from the WCS which was used to create the headerlet
+-  `HDRNAME`  - a unique name for the headerlet
+-  `DESTIM`   - target image filename (the ROOTNAME keyword of the original archive filename)
+-  `WCSNAME`  - the value of WCSNAME<key> copied from the WCS which was used to create the headerlet
 -  `SIPNAME`  - the name of reference file which contained the original distortion model coefficients. A blank value or 'N/A' will indicate no SIP model was provided or applied. A value of 'UNKNOWN' indicates a SIP model of unknown origin.
 -  `NPOLFILE` - the name of the NPOLFILE, the reference file which contained the original non-polynomial corrections. The same rules used for SIPNAME apply here as well.
 -  `D2IMFILE` - the name of the D2IMFILE, the reference file which contained the detector to image correction (such as column width correction calibrations). The same rules used for SIPNAME apply here as well.

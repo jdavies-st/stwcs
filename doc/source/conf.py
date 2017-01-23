@@ -28,7 +28,8 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.intersphinx',
               'numpydoc',
               'sphinx.ext.imgmath',
-              'sphinx.ext.viewcode']
+              'sphinx.ext.viewcode',
+              'sphinx_automodapi.automodapi']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -204,3 +205,4 @@ latex_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping['astropy'] = ('http://docs.astropy.org/en/latest/', None)
