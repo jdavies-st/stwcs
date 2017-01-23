@@ -1,0 +1,7 @@
+name: stak
+channels:
+  - http://ssb.stsci.edu/astroconda
+dependencies:
+  - astropy
+  - numpy
+  - stsci.tools
