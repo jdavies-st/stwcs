@@ -40,7 +40,6 @@ default_log_level = log.getEffectiveLevel()
 
 # Logging support functions
 
-
 class FuncNameLoggingFormatter(logging.Formatter):
     def __init__(self, fmt=None, datefmt=None):
         if '%(funcName)s' not in fmt:
@@ -426,7 +425,10 @@ def print_summary(summary_cols, summary_dict, pad=2, maxwidth=None, idcol=None,
     # Find max width of each column
     column_widths = {}
     for kw in summary_dict:
-        colwidth = np.array(summary_dict[kw]['width']).max()
+        #-- Default colwidth to 0 if empty list
+        all_widths = summary_dict[kw]['width']
+        colwidth = 0 if not len(all_widths) else np.array(all_widths).max()
+
         if maxwidth:
             colwidth = min(colwidth, maxwidth)
         column_widths[kw] = colwidth + pad
@@ -600,6 +602,10 @@ def extract_headerlet(filename, output, extnum=None, hdrname=None,
     logging: boolean
              enable logging to a file
 
+    Raises
+    ------
+    ValueError
+        If extnum and hdrname do not match
     """
 
     if isinstance(filename, fits.HDUList):
@@ -1371,12 +1377,18 @@ def _delete_single_headerlet(filename, hdrname=None, hdrext=None, distname=None,
 
 def headerlet_summary(filename, columns=None, pad=2, maxwidth=None,
                       output=None, clobber=True, quiet=False):
-    """
+    """Print summary of all HeaderletHDUs
 
-    Print a summary of all HeaderletHDUs in a science file to STDOUT, and
-    optionally to a text file
+    Will output to STDOUT, and optionally to a text file
+
     The summary includes:
-    HDRLET_ext_number  HDRNAME  WCSNAME DISTNAME SIPNAME NPOLFILE D2IMFILE
+        - HDRLET_ext_number
+        - HDRNAME
+        - WCSNAME
+        - DISTNAME
+        - SIPNAME
+        - NPOLFILE
+        - D2IMFILE
 
     Parameters
     ----------
