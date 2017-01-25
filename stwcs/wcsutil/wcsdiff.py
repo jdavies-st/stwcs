@@ -9,8 +9,9 @@ import numpy as np
 
 def is_wcs_identical(scifile, file2, sciextlist, fextlist, scikey=" ",
                      file2key=" ", verbose=False):
-    """
-    Compares the WCS solution of 2 files.
+    """ Compares the WCS solution of 2 FITS extensions.
+
+
 
     Parameters
     ----------
@@ -129,8 +130,23 @@ def is_wcs_identical(scifile, file2, sciextlist, fextlist, scikey=" ",
 
 
 def get_rootname(fname):
-    """
-    Returns the value of ROOTNAME or DESTIM
+    """Returns the value of ROOTNAME or DESTIM
+
+    Rootname will be one of the following (in order):
+
+    1.  ROOTNAME keyword in the primary header
+    2.  DESTIM keyword in the primary header
+    3.  The input filename
+
+    Parameters
+    ----------
+    fname: str
+        Filename of the FITS file to parse
+
+    Returns
+    -------
+    rootname: str
+        Rootname of the input FITS file
     """
 
     hdr = fits.getheader(fname)
@@ -145,11 +161,26 @@ def get_rootname(fname):
 
 
 def get_extname_extnum(ext):
-    """
-    Return (EXTNAME, EXTNUM) of a FITS extension
+    """Return (EXTNAME, EXTNUM) of the supplied FITS extension
+
+    The extension name (EXTNAME) and extension number (EXTNUM)
+    will be pulled from the input extension's header.  If not
+    found, will default to an EXTNAME of an empty string, and an
+    extnum of 1.
+
+    Parameters
+    ----------
+    ext: fits extension hdu
+
+    Returns
+    -------
+    (extname, extnum): tuple
+        Extension name, extension number of the input hdu
     """
     extname = ""
     extnum = 1
+
     extname = ext.header.get('EXTNAME', extname)
     extnum = ext.header.get('EXTVER', extnum)
+
     return (extname, extnum)
