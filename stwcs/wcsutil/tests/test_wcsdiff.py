@@ -20,9 +20,11 @@ def test_is_wcs_identical():
                                     ('SCI', 1),
                                     ('SCI', 1)), "Found difference from identical file"
 
+
 def test_get_rootname():
     """Simple unittest for parsing rootname"""
     assert wcsdiff.get_rootname(TEST_FILE) == 'j94f05bgq', 'Rootname parsed incorrectly'
+
 
 def test_get_extname_extnum():
     """Simple unittest for getting extentsion number"""

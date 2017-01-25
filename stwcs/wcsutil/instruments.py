@@ -317,4 +317,3 @@ class STISWCS(InstrWCS):
             self.date_obs = self.exthdr['DATE-OBS']
         except (KeyError, TypeError):
             self.date_obs = None
-
