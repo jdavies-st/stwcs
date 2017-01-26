@@ -55,6 +55,14 @@ The primary header must have 4 required keywords:
 -  `PYWCSVER` - version of PyWCS used to create the WCS of the original image
 
 
+Manipulating Headerlets
+-----------------------
+
+.. toctree::
+  :maxdepth: 2
+
+  headerlet_tutorials
+
 
 User-Interface: headerlet
 --------------------------

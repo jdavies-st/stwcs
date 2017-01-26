@@ -4,6 +4,7 @@ import copy
 import numpy as np
 from astropy.io import fits
 
+### TODO Fix import to absolute after unittests
 import stwcs
 from . import altwcs
 from ..updatewcs import utils

@@ -33,3 +33,9 @@ def test_headerlet_summary():
     """Simply test that it doesn't fail"""
 
     headerlet.headerlet_summary(TEST_FILE)
+
+# Needs big test data
+#def test_create_headerlet():
+#    """Simply test that it doesn't fail"""
+#
+#    headerlet.create_headerlet(TEST_FILE)

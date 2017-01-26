@@ -868,8 +868,8 @@ def create_headerlet(filename, sciext='SCI', hdrname=None, destim=None,
                      author=None, descrip=None, history=None,
                      nmatch=None, catalog=None,
                      logging=False, logmode='w'):
-    """
-    Create a headerlet from a WCS in a science file
+    """Create a headerlet from a WCS in a science file
+
     If both wcskey and wcsname are given they should match, if not
     raise an Exception
 
@@ -947,6 +947,16 @@ def create_headerlet(filename, sciext='SCI', hdrname=None, destim=None,
     Returns
     -------
     Headerlet object
+
+    Examples
+    --------
+    This example pulls out the default WCS information into an individual
+    headerlet object::
+
+        >>> hdrlet = create_headerlet('jcoy02c8q_flt.fits')
+        >>> hdrlet.info()
+        HDRNAME  WCSNAME        DISTNAME                                 AUTHOR  DATE                 SIPNAME              NPOLFILE                 D2IMFILE                 DESCRIP
+        OPUS     IDC_0461802dj  jcoy02c8q_0461802dj-02c1450rj-02c1450oj          2017-01-25T13:28:36  jcoy02c8q_0461802dj  jref$02c1450rj_npl.fits  jref$02c1450oj_d2i.fits
 
     """
     if wcskey == 'O':
@@ -1175,6 +1185,53 @@ def apply_headerlet_as_primary(filename, hdrlet, attach=True, archive=True,
             enable file logging
     logmode: 'w' or 'a'
              log file open mode
+
+
+    Examples
+    --------
+        >>> fits.open('jcoy02c8q_flt.fits').info()
+            Filename: jcoy02c8q_flt.fits
+            No.    Name         Type      Cards   Dimensions   Format
+              0  PRIMARY     PrimaryHDU     256   ()
+              1  SCI         ImageHDU       200   (4096, 2048)   float32
+              2  ERR         ImageHDU        56   (4096, 2048)   float32
+              3  DQ          ImageHDU        48   (4096, 2048)   int16
+              4  SCI         ImageHDU       198   (4096, 2048)   float32
+              5  ERR         ImageHDU        56   (4096, 2048)   float32
+              6  DQ          ImageHDU        48   (4096, 2048)   int16
+              7  D2IMARR     ImageHDU        15   (64, 32)   float32
+              8  D2IMARR     ImageHDU        15   (64, 32)   float32
+              9  D2IMARR     ImageHDU        15   (64, 32)   float32
+             10  D2IMARR     ImageHDU        15   (64, 32)   float32
+             11  WCSDVARR    ImageHDU        15   (64, 32)   float32
+             12  WCSDVARR    ImageHDU        15   (64, 32)   float32
+             13  WCSDVARR    ImageHDU        15   (64, 32)   float32
+             14  WCSDVARR    ImageHDU        15   (64, 32)   float32
+             15  WCSCORR     BinTableHDU     59   14R x 24C   [40A, I, A, 24A, 24A, 24A, 24A, D, D, D, D, D, D, D, D, 24A, 24A, D, D, D, D, J, 40A, 128A]
+        >>> apply_headerley_as_primary('jcoy02c8q_flt.fits', 'jcoy02c8q_flt_hlet.fits')
+        >>> fits.open('jcoy02c8q_flt.fits').info()
+            Filename: jcoy02c8q_flt.fits
+            No.    Name         Type      Cards   Dimensions   Format
+              0  PRIMARY     PrimaryHDU     256   ()
+              1  SCI         ImageHDU       228   (4096, 2048)   float32
+              2  ERR         ImageHDU        56   (4096, 2048)   float32
+              3  DQ          ImageHDU        48   (4096, 2048)   int16
+              4  SCI         ImageHDU       224   (4096, 2048)   float32
+              5  ERR         ImageHDU        56   (4096, 2048)   float32
+              6  DQ          ImageHDU        48   (4096, 2048)   int16
+              7  WCSCORR     BinTableHDU     59   14R x 24C   [40A, I, A, 24A, 24A, 24A, 24A, D, D, D, D, D, D, D, D, 24A, 24A, D, D, D, D, J, 40A, 128A]
+              8  WCSDVARR    ImageHDU        15   (64, 32)   float32
+              9  WCSDVARR    ImageHDU        15   (64, 32)   float32
+             10  D2IMARR     ImageHDU        15   (64, 32)   float32
+             11  D2IMARR     ImageHDU        15   (64, 32)   float32
+             12  WCSDVARR    ImageHDU        15   (64, 32)   float32
+             13  WCSDVARR    ImageHDU        15   (64, 32)   float32
+             14  D2IMARR     ImageHDU        15   (64, 32)   float32
+             15  D2IMARR     ImageHDU        15   (64, 32)   float32
+             16  HDRLET      HeaderletHDU     26   ()
+             17  HDRLET      HeaderletHDU     26   ()
+
+
     """
     if not isinstance(filename, list):
         filename = [filename]
@@ -1414,6 +1471,10 @@ def headerlet_summary(filename, columns=None, pad=2, maxwidth=None,
             If True, will overwrite any previous output file of same name
     quiet: bool
             If True, will NOT report info to STDOUT
+
+
+    Examples
+    --------
 
     """
     if columns is None:
@@ -2336,9 +2397,15 @@ class Headerlet(fits.HDUList):
         return summary_cols, summary
 
     def hverify(self):
-        """
-        Verify the headerlet file is a valid fits file and has
-        the required Primary Header keywords
+        """Assert headerlet is valid FITS and contains required keywords
+
+        The Primary Header is checked for the presence of DESTIM, HDRNAME,
+        and UPWCSVER.
+
+        Raises
+        ------
+        AssertionError
+            If not valid FITS and/or misses needed keywords
         """
         self.verify()
         header = self[0].header
@@ -2379,12 +2446,12 @@ class Headerlet(fits.HDUList):
     def equal_distmodel(self, dmodel):
         if dmodel != self[0].header['DISTNAME']:
             if self.logging:
-                    message = """
-                    Distortion model in headerlet not the same as destination model
-                    Headerlet model  : %s
-                    Destination model: %s
-                    """ % (self[0].header['DISTNAME'], dmodel)
-                    logger.critical(message)
+                message = """
+                Distortion model in headerlet not the same as destination model
+                Headerlet model  : %s
+                Destination model: %s
+                """ % (self[0].header['DISTNAME'], dmodel)
+                logger.critical(message)
             return False
         else:
             return True
@@ -2417,6 +2484,15 @@ class Headerlet(fits.HDUList):
     def build_distname(self, dest):
         """
         Builds the DISTNAME for dest based on reference file names.
+
+        Parameters
+        ----------
+        dest: HDUobject
+
+        Returns
+        -------
+        dname: str
+            DISTNAME for the destination
         """
 
         try:
