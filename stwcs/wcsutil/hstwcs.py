@@ -3,10 +3,11 @@ from __future__ import absolute_import, division, print_function
 import os
 from astropy.wcs import WCS
 from astropy.io import fits
-from ..distortion import models, coeff_converter
 import numpy as np
+
 from stsci.tools import fileutil
 
+from ..distortion import models, coeff_converter
 from . import pc2cd
 from . import getinput
 from . import instruments
@@ -1020,5 +1021,5 @@ def determine_refframe(phdr):
         refframe = "FK5"
     elif refframe != "ICRS":
         refframe = None
-        
+
     return refframe

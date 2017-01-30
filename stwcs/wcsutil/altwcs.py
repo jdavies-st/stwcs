@@ -578,6 +578,12 @@ def wcskeys(fobj, ext=None):
     ext : int or None
          extension number
          if None, fobj must be a header
+
+    Examples
+    --------
+    >>> wcskeys('jcoy02cbq_flt.fits', ext=1)
+    ['O', ' ']
+
     """
     _check_headerpars(fobj, ext)
     hdr = _getheader(fobj, ext)
@@ -601,6 +607,13 @@ def wcsnames(fobj, ext=None):
     ext : int or None
          extension number
          if None, fobj must be a header
+
+    Examples
+    --------
+    >>> wcsnames('jcoy02cbq_flt.fits', ext=1)
+    {' ': 'IDC_0461802dj', 'O': 'OPUS'}
+
+
 
     """
     _check_headerpars(fobj, ext)
@@ -627,6 +640,19 @@ def available_wcskeys(fobj, ext=None):
     ext : int or None
         extension number
         if None, fobj must be a header
+
+    Examples
+    --------
+    >>> available_wcskeys('jcoy02cbq_flt.fits', ext=1)
+    ['A',
+     'B',
+     'C',
+     'D',
+     ...
+     'W',
+     'X',
+     'Y',
+     'Z']
     """
     _check_headerpars(fobj, ext)
     hdr = _getheader(fobj, ext)

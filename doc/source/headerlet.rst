@@ -1,8 +1,6 @@
-.. _headerlet:
+Headerlets (`stwcs.wcsutil.headerlet`)
+======================================
 
-**************************************
-Headerlet
-**************************************
 The 'headerlet' serves as a mechanism for encapsulating WCS information
 for a single pointing so that it can be used to update the WCS solution of
 an image. The concept of a 'headerlet' seeks to provide a solution where
@@ -58,18 +56,110 @@ The primary header must have 4 required keywords:
 Manipulating Headerlets
 -----------------------
 
-.. toctree::
-  :maxdepth: 2
+Creating Headerlets
+~~~~~~~~~~~~~~~~~~~
+Headerlets can be created from existing FITS files for saving separately,
+modification, or even applying to other files.  The `create_headerlet` function
+will pull the WCS information from the given FITS files into a Headerlet object.
 
-  headerlet_tutorials
+>>> from stwcs.wcsutil import headerlet
+>>> hdrlet = headerlet.create_headerlet('jcoy02c8q_flt.fits')
+>>> hdrlet.info()
+    HDRNAME  WCSNAME        DISTNAME                                 AUTHOR  DATE                 SIPNAME              NPOLFILE                 D2IMFILE                 DESCRIP
+    OPUS     IDC_0461802dj  jcoy02c8q_0461802dj-02c1450rj-02c1450oj          2017-01-25T13:28:36  jcoy02c8q_0461802dj  jref$02c1450rj_npl.fits  jref$02c1450oj_d2i.fits
 
+This resulting headerlet object can then be written to an output file if needed.
 
-User-Interface: headerlet
---------------------------
-The headerlet module provides those functions necessary
-for creating, updating, and applying headerlets to FITS images.
+>>> hdrlet.tofile('out_hlet.fits')
 
-.. toctree::
-   :maxdepth: 2
+Attaching a Headerlet to a file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   headerlet_ui
+A file with no headerlets, but valid WCSs, can be seen below.
+
+>>> from astropy.io import fits
+>>> with fits.open('jcoy02c8q_flt.fits') as hdu:
+...     print(hdu.info())
+Filename: jcoy02c8q_flt.fits
+No.    Name         Type      Cards   Dimensions   Format
+  0  PRIMARY     PrimaryHDU     256   ()
+  1  SCI         ImageHDU       200   (4096, 2048)   float32
+  2  ERR         ImageHDU        56   (4096, 2048)   float32
+  3  DQ          ImageHDU        48   (4096, 2048)   int16
+  4  SCI         ImageHDU       198   (4096, 2048)   float32
+  5  ERR         ImageHDU        56   (4096, 2048)   float32
+  6  DQ          ImageHDU        48   (4096, 2048)   int16
+  7  D2IMARR     ImageHDU        15   (64, 32)   float32
+  8  D2IMARR     ImageHDU        15   (64, 32)   float32
+  9  D2IMARR     ImageHDU        15   (64, 32)   float32
+ 10  D2IMARR     ImageHDU        15   (64, 32)   float32
+ 11  WCSDVARR    ImageHDU        15   (64, 32)   float32
+ 12  WCSDVARR    ImageHDU        15   (64, 32)   float32
+ 13  WCSDVARR    ImageHDU        15   (64, 32)   float32
+ 14  WCSDVARR    ImageHDU        15   (64, 32)   float32
+ 15  WCSCORR     BinTableHDU     59   14R x 24C   [40A, I, A, 24A, 24A, 24A, 24A, D, D, D, D, D, D, D, D, 24A, 24A, D, D, D, D, J, 40A, 128A]
+
+A headerlet can be appended to the HDU easily:
+
+>>> # Using an already created headerlet object from the above examples
+>>> hdrlet.apply_as_primary('jcoy02c8q_flt.fits')
+
+After which, the headerlet can be seen in the file structure.
+
+>>> from astropy.io import fits
+>>> with fits.open('jcoy02c8q_flt.fits') as hdu:
+...     print(hdu.info())
+Filename: jcoy02c8q_flt.fits
+No.    Name         Type      Cards   Dimensions   Format
+  0  PRIMARY     PrimaryHDU     256   ()
+  1  SCI         ImageHDU       228   (4096, 2048)   float32
+  2  ERR         ImageHDU        56   (4096, 2048)   float32
+  3  DQ          ImageHDU        48   (4096, 2048)   int16
+  4  SCI         ImageHDU       224   (4096, 2048)   float32
+  5  ERR         ImageHDU        56   (4096, 2048)   float32
+  6  DQ          ImageHDU        48   (4096, 2048)   int16
+  7  WCSCORR     BinTableHDU     59   14R x 24C   [40A, I, A, 24A, 24A, 24A, 24A, D, D, D, D, D, D, D, D, 24A, 24A, D, D, D, D, J, 40A, 128A]
+  8  WCSDVARR    ImageHDU        15   (64, 32)   float32
+  9  WCSDVARR    ImageHDU        15   (64, 32)   float32
+ 10  D2IMARR     ImageHDU        15   (64, 32)   float32
+ 11  D2IMARR     ImageHDU        15   (64, 32)   float32
+ 12  WCSDVARR    ImageHDU        15   (64, 32)   float32
+ 13  WCSDVARR    ImageHDU        15   (64, 32)   float32
+ 14  D2IMARR     ImageHDU        15   (64, 32)   float32
+ 15  D2IMARR     ImageHDU        15   (64, 32)   float32
+ 16  HDRLET      HeaderletHDU     26   ()
+
+Locating and Viewing Headerlets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+>>> hdu = fits.open('jcoy02c8q_flt.fits')
+>>> # the strict=False parameter is needed to return all found headerlets
+>>> headerlet.find_headerlet_HDUs(hdu, strict=False)
+[16]
+
+Printing a human-readable summary of headerlets is also available.
+
+>>> headerlet.headerlet_summary('jcoy02c8q_flt.fits')
+EXTN    HDRNAME        WCSNAME        DISTNAME                                 AUTHOR  DATE                 SIPNAME              NPOLFILE                 D2IMFILE                 DESCRIP
+16      IDC_0461802dj  IDC_0461802dj  jcoy02c8q_0461802dj-02c1450rj-02c1450oj          2017-01-30T15:07:31  jcoy02c8q_0461802dj  jref$02c1450rj_npl.fits  jref$02c1450oj_d2i.fits
+
+Headerlet Deletion
+~~~~~~~~~~~~~~~~~~
+Headerlets can be removed from files with available utility functions, either
+by name or by number.
+
+>>> headerlet.delete_headerlet('jcoy02c8q_flt.fits', hdrext=16)
+Deleting Headerlet from  jcoy02c8q_flt.fits
+_delete_single_headerlet CRITICAL: Deleted headerlet from extension(s) [16]
+
+>>> headerlet.delete_headerlet('jcoy02c8q_flt.fits', hdrname='IDC_0461802dj')
+Deleting Headerlet from  jcoy02c8q_flt.fits
+_delete_single_headerlet CRITICAL: Deleted headerlet from extension(s) [16]
+
+Selecting primary and alternate
+
+Reference API
+-------------
+
+.. automodapi:: stwcs.wcsutil.headerlet
+  :no-heading:
