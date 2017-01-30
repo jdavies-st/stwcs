@@ -1,23 +1,23 @@
 from __future__ import absolute_import, division, print_function
 
 import atexit
+import time
+
+import astropy
 from astropy.io import fits
+from astropy import wcs as pywcs
+from astropy import log
+default_log_level = log.getEffectiveLevel()
+
+from stsci.tools import parseinput, fileutil
+from . import utils, corrections
+from . import npol, det2im
+from . import apply_corrections
 from .. import wcsutil
 #from ..wcsutil.hwstwcs import HSTWCS
 
 from .. import __version__
 
-from astropy import wcs as pywcs
-import astropy
-from astropy import log
-default_log_level = log.getEffectiveLevel()
-
-from . import utils, corrections
-from . import npol, det2im
-from stsci.tools import parseinput, fileutil
-from . import apply_corrections
-
-import time
 import logging
 logger = logging.getLogger('stwcs.updatewcs')
 
