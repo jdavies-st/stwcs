@@ -1,5 +1,5 @@
-Summary stwcs API
-=================
+Complete Reference API
+======================
 
 .. automodapi:: stwcs.distortion
 

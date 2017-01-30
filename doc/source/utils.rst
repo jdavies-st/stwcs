@@ -1,13 +1,7 @@
 .. _utils:
 
-**************************************
-UPDATEWCS.UTILS functions
-**************************************
+WCS Utilities (`stwcs.updatewcs.utils`)
+=======================================
 
-.. py:currentmodule:: stwcs.updatewcs.utils
-
-
-.. autofunction:: stwcs.updatewcs.utils.build_sipname
-.. autofunction:: stwcs.updatewcs.utils.build_npolname
-.. autofunction:: stwcs.updatewcs.utils.build_d2imname
-.. autofunction:: stwcs.updatewcs.utils.build_distname
+.. automodapi:: stwcs.updatewcs.utils
+  :no-heading:

@@ -17,19 +17,20 @@ other distortion infomation in the science files as header keywords or file exte
 specific information as well as methods for coordinate tarnsformaiton. ``wcsutil`` also provides
 functions for manipulating alternate WCS descriptions in the headers.
 
-Contents:
-=========
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
 
+   installation
    wcsutil
    updatewcs
    headerlet
    full_api
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
